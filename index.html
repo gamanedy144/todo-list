@@ -22,21 +22,47 @@
 
     <div class="info-container">
         <div class="about">
-            <h1>Todo List</h1>
+            <h3>Todo List</h3>
             <span>This web application serves as a task manager with support for multiple projects</span>
         </div>
         <div class="connect">
-            <h1>Register</h1>
-            
+            <h3>Log in</h3>
+            <span>To retrieve the saved projects</span>
+            <form>
+                <div class="email-address-input input-group">
+                    <label for="email-address">Email address</label>
+                    <input type="text" id="email-adress" name="email-address">
+                </div>
+
+                <div class="password-input input-group">
+                    <label for="password">Password</label>
+                    <input type="text" id="password" name="password">                    
+                </div>
+
+                <button class="log-in" id="log-in">Log in</button>
+            </form> 
+            <hr class="solid">
+
+            <span class="other">Continue with <a href="">Guest account</a>  (data saved locally) or <a href="">Register</a></span>
         </div>
     </div>
 
     <div class="projects-container">
         <ul class="projects-list">
             <li class="project">
-                <ul class="todo-list"><li class="todo add-new-todo"></li></ul>
+                <div class="project-top-row">
+                    <span class="project-title">Default project</span>
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+               
+                
+                <ul class="todo-list">
+                    <li class="todo-item ">test</li><li class="todo-item add-new-todo">Add new todo item</li></ul>
             </li>
-            <li class="project add-new-project"></li>
+            <li class="project add-new-project">
+                <span>Add new project</span>
+                <i class="fa-solid fa-circle-plus"></i>
+            </li>
         </ul>
     </div>
     <footer>
