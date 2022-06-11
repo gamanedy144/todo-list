@@ -72,7 +72,7 @@ header .account i{
     font-size: var(--content-font-size);
     border: 3px gray solid;
     border-radius: var(--border-radius-value);
-    max-width: max(300px, 20vw);
+    width: max(350px, 20vw);
     gap: 1rem;
 }
 .connect form{
@@ -218,7 +218,7 @@ header .account i{
     cursor: pointer;
     font-size: var(--subtitle-font-size)
 }
-@media only screen and (max-width:850px){
+@media only screen and (max-width:950px){
     header{
         padding: calc(var(--padding-left-right-global)*0.5) calc(var(--padding-left-right-global)*0.5);
     }
@@ -229,8 +229,11 @@ header .account i{
         align-items: center;
 
     }
+    .about{
+        width: max(350px, 100%);
+    }
     .projects-container{
-        padding: calc(var(--padding-left-right-global)*0.5) calc(var(--padding-left-right-global)*0.5);
+        padding: 0 calc(var(--padding-left-right-global)*0.5) calc(var(--padding-left-right-global)*0.5) calc(var(--padding-left-right-global)*0.5);
     }
     .projects-list{
         display: flex;
@@ -238,6 +241,19 @@ header .account i{
         align-items: center;
     }
     .project{
-        width: max(350px, 80%);
+        width: min(350px,100%);
+    }
+}
+
+@media only screen and (max-width:650px){
+    header{
+        padding: calc(var(--padding-left-right-global)*0.25) calc(var(--padding-left-right-global)*0.25);
+        min-height: 5vh;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    header .account{
+        align-self: flex-end;
     }
 }
