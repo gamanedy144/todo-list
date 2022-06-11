@@ -257,3 +257,9 @@ header .account i{
         align-self: flex-end;
     }
 }
+
+@media only screen and (max-width: 470px){
+    .project{
+        width: max(350px,100%);
+    }
+}
