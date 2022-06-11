@@ -52,13 +52,7 @@ function addEventListenerToNewTodoItemList(){
 
 
 function addEventListenerToIcon(icon){
-    let iconLabel = icon.parentElement;
-    let inputId = iconLabel.getAttribute('for');
-
-    let currentInput = document.getElementById(inputId);
-
-    let formElem = iconLabel.parentElement;
-    let currentNode = formElem.parentElement;
+    
                 
         // icon.addEventListener('click', function(){
         //     console.log("value inside function " + currentInput.value) ;
@@ -67,7 +61,15 @@ function addEventListenerToIcon(icon){
         // })
 
     icon.addEventListener('click', function(){
+        let iconLabel = icon.parentElement;
+        let inputId = iconLabel.getAttribute('for');
+        
+        let currentInput = document.getElementById(inputId);
+        console.log(icon)
         if(currentInput.value !== ''){
+            let formElem = iconLabel.parentElement;
+            let currentNode = formElem.parentElement;
+
             console.log("value inside function " + currentInput.value) ;
             addNewTodoItem(currentInput.value, currentNode);
             currentInput.value ="";
@@ -152,10 +154,12 @@ function addNewProjectToList(){
     let newProjectToBeAdded = createNewProject();
     projecstListElement.insertBefore(newProjectToBeAdded, addNewProject);
 
+    updateAll();
+
     addEventListenerToNewTodoItem(newProjectToBeAdded.querySelector('.add-new-todo'));
     addEventListenerToIcon(newProjectToBeAdded.querySelector('i'));
 
-    updateAll();
+
 }
 
 // function to create the Todo Item

@@ -218,3 +218,26 @@ header .account i{
     cursor: pointer;
     font-size: var(--subtitle-font-size)
 }
+@media only screen and (max-width:850px){
+    header{
+        padding: calc(var(--padding-left-right-global)*0.5) calc(var(--padding-left-right-global)*0.5);
+    }
+    .info-container{
+        padding: calc(var(--padding-left-right-global)*0.5) calc(var(--padding-left-right-global)*0.5);
+        /* display: flex; */
+        flex-direction: column;
+        align-items: center;
+
+    }
+    .projects-container{
+        padding: calc(var(--padding-left-right-global)*0.5) calc(var(--padding-left-right-global)*0.5);
+    }
+    .projects-list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .project{
+        width: max(350px, 80%);
+    }
+}
