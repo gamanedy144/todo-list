@@ -62,9 +62,9 @@ function addEventListenerToIcon(icon){
 
     icon.addEventListener('click', function(){
         let iconLabel = icon.parentElement;
-        let inputId = iconLabel.getAttribute('for');
+        let formElem = iconLabel.parentElement;
         
-        let currentInput = document.getElementById(inputId);
+        let currentInput = formElem.querySelector('input');
         console.log(icon)
         if(currentInput.value !== ''){
             let formElem = iconLabel.parentElement;
