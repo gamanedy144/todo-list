@@ -9,6 +9,7 @@
     --pading-top-bottom-global: 1rem;
     --padding-left-right-global: 7.5rem;
     --border-radius-value: 8px;
+    --input-padding: 5px;
 }
 
 body{
@@ -85,6 +86,12 @@ header .account i{
 }
 .connect input{
     width: 100%;
+    border: 1px solid black;
+    padding: var(--input-padding);
+    border-radius: var(--border-radius-value);
+}
+.connect label, .connect input{
+    font-size: var(--content-font-size);
 }
 .connect button{
     justify-self: center;
@@ -185,9 +192,29 @@ header .account i{
 }
 .add-new-todo{
     opacity: 50%;
-    cursor: pointer;
-
+    /* cursor: pointer; */
+    
 }
-.add-new-todo:hover{
+.add-new-todo form{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+.add-new-todo:hover, .add-new-todo:focus-within{
     opacity: 100%;
+}
+
+.add-new-todo input{
+    font-size: var(--content-font-size);
+    padding: var(--input-padding);
+    width: 100%;
+    border: none;
+}
+.add-new-todo label{
+    display: flex;
+}
+.add-new-todo i{
+    cursor: pointer;
+    font-size: var(--subtitle-font-size)
 }

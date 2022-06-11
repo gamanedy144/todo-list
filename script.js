@@ -4,12 +4,14 @@ const addNewProject = document.querySelector('.add-new-project');
 let addNewTodoItemList = document.querySelectorAll('.add-new-todo');
 const projecstListElement = document.querySelector('.projects-list');
 let projectsList = document.querySelectorAll('.project');
+let plusIcons = document.querySelectorAll('.fa-square-plus');
 
 let projectCount = projectsList.length - 1;
 
 window.addEventListener('load', function(){
     console.log('I am loaded');
     addEventListenerToNewTodoItemList();
+    addEventListenerToPlusIcons();
 
 } );
 
@@ -21,41 +23,77 @@ function updateAddNewTodoItemList(){
 function updateProjecstList(){
     projectsList = document.querySelectorAll('.project');
 }
+function updatePlusIcons(){
+    plusIcons = document.querySelectorAll('.fa-square-plus');
+}
 addNewProject.addEventListener('click', addNewProjectToList);
 
-
+function addEventListenerToNewTodoItem(currentNode){
+    currentNode.addEventListener('keypress',
+        function(event){
+            if(event.key ==='Enter' || event.keyCode == 13){
+                event.preventDefault();
+                let currentInput = currentNode.querySelector('input');
+                if(currentInput.value !== ''){
+                    addNewTodoItem(currentInput.value, currentNode);
+                    currentInput.value = '';
+                }
+            }
+        }
+    , false);
+}
 function addEventListenerToNewTodoItemList(){
     addNewTodoItemList.forEach(
         function(currentNode){
-            // console.log(getEventListeners(currentNode));
-            // if(Object.keys(getEventListeners(currentNode)).length != 1){
-            //     currentNode.addEventListener('click', function(){
-            //         addNewTodoItem('test', currentNode);
-            //         console.log(getEventListeners(currentNode));
-            //     });
-            // }
-            currentNode.addEventListener('click', function(){
-                addNewTodoItem('test', currentNode)
-            });
+            addEventListenerToNewTodoItem(currentNode);
         }
     );
 }
 
+
+function addEventListenerToIcon(icon){
+    let iconLabel = icon.parentElement;
+    let inputId = iconLabel.getAttribute('for');
+
+    let currentInput = document.getElementById(inputId);
+
+    let formElem = iconLabel.parentElement;
+    let currentNode = formElem.parentElement;
+                
+        // icon.addEventListener('click', function(){
+        //     console.log("value inside function " + currentInput.value) ;
+        //     addNewTodoItem(currentInput.value, currentNode);
+        //     currentInput.value ="";
+        // })
+
+    icon.addEventListener('click', function(){
+        if(currentInput.value !== ''){
+            console.log("value inside function " + currentInput.value) ;
+            addNewTodoItem(currentInput.value, currentNode);
+            currentInput.value ="";
+        }
+    })
+}
+function addEventListenerToPlusIcons(){
+    plusIcons.forEach(
+        function(icon){
+            addEventListenerToIcon(icon);
+            
+        }
+    )
+}
 function updateAll(){
     updateAddNewTodoItemList();
     updateProjecstList();
-
-}
-
-function addEventListenerToNewTodoItem(currentNode){
-    currentNode.addEventListener('click', function(){
-        addNewTodoItem('test', currentNode)}
-        );
+    updatePlusIcons();
 }
 
 
 
+
+// function to create Project
 function createNewProject(){
+    projectCount++;
     const newProject = document.createElement('li');
     newProject.classList.add('project');
 
@@ -78,22 +116,49 @@ function createNewProject(){
     newTodoList.classList.add('todo-list');
     const newTodo = document.createElement('li');
     newTodo.classList.add('todo-item', 'add-new-todo');
-    newTodo.textContent = 'Add new todo item';
-    addEventListenerToNewTodoItem(newTodo);
+
+    const newTodoForm = document.createElement('form');
+
+    const newTodoInput = document.createElement('input');
+    newTodoInput.setAttribute('type','text');
+
+    newTodoInput.setAttribute('placeholder','Add new todo item');
+    newTodoInput.setAttribute('id',`add-new-todo-input-${projectCount}`);
+    newTodoInput.setAttribute('value', "");
+
+    newTodoForm.appendChild(newTodoInput);
+    const newTodoLabel = document.createElement('label');
+    newTodoLabel.setAttribute('for',`add-new-todo-input-${projectCount}`);
+
+    const newTodoLabelPlusIcon = document.createElement('i');
+    newTodoLabelPlusIcon.classList.add('fa-solid', 'fa-square-plus');
+
+    newTodoLabel.appendChild(newTodoLabelPlusIcon);
     
+    newTodoForm.appendChild(newTodoLabel);
+
+    newTodo.appendChild(newTodoForm);
+
+    // addEventListenerToNewTodoItem(newTodo);
+    // console.log(newTodoLabelPlusIcon);
+    // addEventListenerToIcon(newTodoLabelPlusIcon);
     newTodoList.appendChild(newTodo);
     newProject.appendChild(newTodoList);
 
     return newProject;
 }
-
+// function to add Project to DOM
 function addNewProjectToList(){
     let newProjectToBeAdded = createNewProject();
     projecstListElement.insertBefore(newProjectToBeAdded, addNewProject);
-    projectCount++;
+
+    addEventListenerToNewTodoItem(newProjectToBeAdded.querySelector('.add-new-todo'));
+    addEventListenerToIcon(newProjectToBeAdded.querySelector('i'));
+
     updateAll();
 }
 
+// function to create the Todo Item
 function createNewTodoItem(inputValue){
     const newTodo = document.createElement('li');
     newTodo.classList.add('todo-item');
@@ -101,19 +166,13 @@ function createNewTodoItem(inputValue){
     
     return newTodo;
 }
+// function to add the Todo Item to DOM
 function addNewTodoItem(inputValue, currentNode){
     let newTodoItemToBeAdded = createNewTodoItem(inputValue);
 
     const parent = currentNode.parentElement;
-    console.log(parent);
+
 
     parent.insertBefore(newTodoItemToBeAdded, currentNode);
 }
 
-
-
-function makeInput(currentNode){
-    const inputText = document.createElement("INPUT");
-    inputText.setAttribute('type', 'text');
-    inputText.classList
-}
