@@ -8,6 +8,30 @@ let plusIcons = document.querySelectorAll('.fa-square-plus');
 
 let projectCount = projectsList.length - 1;
 
+//class for project - title, color and the list of todo lists
+class Project {
+    constructor(title, color, arrayOfTodoItems){
+        this.title = title;
+        this.color = color;
+        this.arrayOfTodoItems = arrayOfTodoItems;
+    }
+}
+//class for todo item
+class TodoItem{
+    constructor(description, status){
+        this.description = description;
+        this.status = status;
+    }
+}
+let projectsArray = [];
+let defaultTodoList = [];
+let defaultTodoItem = new TodoItem("Start by adding your own tasks to this default project", true);
+defaultTodoList.push(defaultTodoItem);
+let defaultProject = new Project("Default project", "#000", defaultTodoList);
+projectsArray.push(defaultProject);
+console.log(projectsArray);
+console.log(defaultTodoList);
+
 window.addEventListener('load', function(){
     console.log('I am loaded');
     addEventListenerToNewTodoItemList();
@@ -28,6 +52,7 @@ function updatePlusIcons(){
 }
 addNewProject.addEventListener('click', addNewProjectToList);
 
+// Add event listener to newTodo item
 function addEventListenerToNewTodoItem(currentNode){
     currentNode.addEventListener('keypress',
         function(event){
@@ -51,21 +76,17 @@ function addEventListenerToNewTodoItemList(){
 }
 
 
+// Add event listener to plus icon
 function addEventListenerToIcon(icon){
     
-                
-        // icon.addEventListener('click', function(){
-        //     console.log("value inside function " + currentInput.value) ;
-        //     addNewTodoItem(currentInput.value, currentNode);
-        //     currentInput.value ="";
-        // })
+    console.log(icon)
+    let iconLabel = icon.parentElement;
+    iconLabel.addEventListener('click', function(){
 
-    icon.addEventListener('click', function(){
-        let iconLabel = icon.parentElement;
         let formElem = iconLabel.parentElement;
         
         let currentInput = formElem.querySelector('input');
-        console.log(icon)
+
         if(currentInput.value !== ''){
             let formElem = iconLabel.parentElement;
             let currentNode = formElem.parentElement;
@@ -116,6 +137,18 @@ function createNewProject(){
 
     const newTodoList = document.createElement('ul');
     newTodoList.classList.add('todo-list');
+    let newTodo = createAddNewTodoItem();
+    // addEventListenerToNewTodoItem(newTodo);
+    // console.log(newTodoLabelPlusIcon);
+    // addEventListenerToIcon(newTodoLabelPlusIcon);
+    newTodoList.appendChild(newTodo);
+    newProject.appendChild(newTodoList);
+
+    return newProject;
+}
+
+// function to create addNewTodoItem
+function createAddNewTodoItem(){
     const newTodo = document.createElement('li');
     newTodo.classList.add('todo-item', 'add-new-todo');
 
@@ -127,28 +160,21 @@ function createNewProject(){
     newTodoInput.setAttribute('placeholder','Add new todo item');
     newTodoInput.setAttribute('id',`add-new-todo-input-${projectCount}`);
     newTodoInput.setAttribute('value', "");
-
     newTodoForm.appendChild(newTodoInput);
     const newTodoLabel = document.createElement('label');
     newTodoLabel.setAttribute('for',`add-new-todo-input-${projectCount}`);
 
     const newTodoLabelPlusIcon = document.createElement('i');
     newTodoLabelPlusIcon.classList.add('fa-solid', 'fa-square-plus');
-
     newTodoLabel.appendChild(newTodoLabelPlusIcon);
     
     newTodoForm.appendChild(newTodoLabel);
 
     newTodo.appendChild(newTodoForm);
 
-    // addEventListenerToNewTodoItem(newTodo);
-    // console.log(newTodoLabelPlusIcon);
-    // addEventListenerToIcon(newTodoLabelPlusIcon);
-    newTodoList.appendChild(newTodo);
-    newProject.appendChild(newTodoList);
-
-    return newProject;
+    return newTodo;
 }
+
 // function to add Project to DOM
 function addNewProjectToList(){
     let newProjectToBeAdded = createNewProject();
@@ -156,12 +182,15 @@ function addNewProjectToList(){
 
     updateAll();
 
+    console.log("in addNewProjectToList 1"); 
     addEventListenerToNewTodoItem(newProjectToBeAdded.querySelector('.add-new-todo'));
+    console.log("in addNewProjectToList 2");
     addEventListenerToIcon(newProjectToBeAdded.querySelector('i'));
+    console.log("in addNewProjectToList 3");
 
 
 }
-
+ 
 // function to create the Todo Item
 function createNewTodoItem(inputValue){
     const newTodo = document.createElement('li');
@@ -180,3 +209,4 @@ function addNewTodoItem(inputValue, currentNode){
     parent.insertBefore(newTodoItemToBeAdded, currentNode);
 }
 
+// LocalStorage Part
