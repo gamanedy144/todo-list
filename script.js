@@ -79,19 +79,17 @@ function addEventListenerToNewTodoItemList(){
 // Add event listener to plus icon
 function addEventListenerToIcon(icon){
     
-    console.log(icon)
-    let iconLabel = icon.parentElement;
-    iconLabel.addEventListener('click', function(){
+    // console.log(`iconLabel is ${iconLabel}`);
 
+    icon.addEventListener('click', function(){
+
+        let iconLabel = icon.parentElement;
         let formElem = iconLabel.parentElement;
-        
         let currentInput = formElem.querySelector('input');
 
         if(currentInput.value !== ''){
-            let formElem = iconLabel.parentElement;
-            let currentNode = formElem.parentElement;
 
-            console.log("value inside function " + currentInput.value) ;
+            let currentNode = formElem.parentElement;
             addNewTodoItem(currentInput.value, currentNode);
             currentInput.value ="";
         }
@@ -160,7 +158,7 @@ function createAddNewTodoItem(){
     newTodoInput.setAttribute('placeholder','Add new todo item');
     newTodoInput.setAttribute('id',`add-new-todo-input-${projectCount}`);
     newTodoInput.setAttribute('value', "");
-    newTodoForm.appendChild(newTodoInput);
+
     const newTodoLabel = document.createElement('label');
     newTodoLabel.setAttribute('for',`add-new-todo-input-${projectCount}`);
 
@@ -168,6 +166,7 @@ function createAddNewTodoItem(){
     newTodoLabelPlusIcon.classList.add('fa-solid', 'fa-square-plus');
     newTodoLabel.appendChild(newTodoLabelPlusIcon);
     
+    newTodoForm.appendChild(newTodoInput);
     newTodoForm.appendChild(newTodoLabel);
 
     newTodo.appendChild(newTodoForm);
@@ -182,12 +181,8 @@ function addNewProjectToList(){
 
     updateAll();
 
-    console.log("in addNewProjectToList 1"); 
     addEventListenerToNewTodoItem(newProjectToBeAdded.querySelector('.add-new-todo'));
-    console.log("in addNewProjectToList 2");
-    addEventListenerToIcon(newProjectToBeAdded.querySelector('i'));
-    console.log("in addNewProjectToList 3");
-
+    addEventListenerToIcon(newProjectToBeAdded.querySelector('.fa-square-plus'));
 
 }
  
