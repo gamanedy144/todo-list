@@ -6,7 +6,7 @@ const projecstListElement = document.querySelector('.projects-list');
 let projectsList = document.querySelectorAll('.project');
 let plusIcons = document.querySelectorAll('.fa-square-plus');
 
-let projectCount = projectsList.length - 1;
+let projectCount = projectsList.length - 2;
 
 //class for project - title, color and the list of todo lists
 class Project {
@@ -14,6 +14,10 @@ class Project {
         this.title = title;
         this.color = color;
         this.arrayOfTodoItems = arrayOfTodoItems;
+    }
+
+    addTodoItemClassMethod(todoItem, location){
+        this.arrayOfTodoItems[location] = todoItem;
     }
 }
 //class for todo item
@@ -29,14 +33,14 @@ let defaultTodoItem = new TodoItem("Start by adding your own tasks to this defau
 defaultTodoList.push(defaultTodoItem);
 let defaultProject = new Project("Default project", "#000", defaultTodoList);
 projectsArray.push(defaultProject);
-console.log(projectsArray);
-console.log(defaultTodoList);
+console.log(projectsArray[0]);
+// console.log(projectsArray);
+// console.log(defaultTodoList);
 
 window.addEventListener('load', function(){
     console.log('I am loaded');
     addEventListenerToNewTodoItemList();
     addEventListenerToPlusIcons();
-
 } );
 
 
@@ -115,8 +119,10 @@ function updateAll(){
 // function to create Project
 function createNewProject(){
     projectCount++;
+
     const newProject = document.createElement('li');
     newProject.classList.add('project');
+    newProject.setAttribute('id', `project-${projectCount}`);
 
     const newProjectTopRow = document.createElement('div');
     newProjectTopRow.classList.add('project-top-row');
@@ -141,7 +147,7 @@ function createNewProject(){
     // addEventListenerToIcon(newTodoLabelPlusIcon);
     newTodoList.appendChild(newTodo);
     newProject.appendChild(newTodoList);
-
+    projectsArray.push(new Project(`New project ${projectCount}`, '#000',[]));
     return newProject;
 }
 
@@ -194,14 +200,50 @@ function createNewTodoItem(inputValue){
     
     return newTodo;
 }
+// function to create the Todo Item from array (memory)
+function createNewTodoItemFromArray(todoItem){
+    const newTodo = document.createElement('li');
+    newTodo.classList.add('todo-item');
+    newTodo.textContent = todoItem.description;
+    
+    return newTodo; 
+}
+
+function createNewTodoItemFactory(todoItem){
+
+    if((typeof todoItem) === Object){
+        return createNewTodoItemFromArray(todoItem);
+    }
+    else {
+        return createNewTodoItem(todoItem);
+    }
+}
 // function to add the Todo Item to DOM
 function addNewTodoItem(inputValue, currentNode){
-    let newTodoItemToBeAdded = createNewTodoItem(inputValue);
-
+    let newTodoItemToBeAdded = createNewTodoItemFactory(inputValue);
     const parent = currentNode.parentElement;
-
-
     parent.insertBefore(newTodoItemToBeAdded, currentNode);
+
+
+    console.log(typeof inputValue);
+    if(typeof inputValue === 'string'){
+        const project = parent.parentElement;
+        let tempTodoItem = new TodoItem(inputValue, true);
+        const projectId = project.getAttribute('id');
+        const number = projectId.charAt(projectId.length-1);
+        let numberOfTodos = parent.querySelectorAll('.todo-item').length - 1;
+        if(projectsArray[number].title === 'Default project'){
+            numberOfTodos--;
+        }
+        projectsArray[number].addTodoItemClassMethod(tempTodoItem,numberOfTodos);
+    }
+
+    // let numberOfTodos = parent.querySelectorAll('.todo-item').length - 1;
+
+    // projectsArray[projectCount].push()
+    // console.log(numberOfTodos);
+
+
 }
 
 // LocalStorage Part
