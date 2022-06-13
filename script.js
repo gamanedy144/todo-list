@@ -6,13 +6,14 @@ const projecstListElement = document.querySelector('.projects-list');
 let projectsList = document.querySelectorAll('.project');
 let plusIcons = document.querySelectorAll('.fa-square-plus');
 
-let projectCount = projectsList.length - 2;
+let projectCount = document.querySelectorAll('.project').length - 1;
 
 //class for project - title, color and the list of todo lists
 class Project {
-    constructor(title, color, arrayOfTodoItems){
+    constructor(title, color,index, arrayOfTodoItems){
         this.title = title;
         this.color = color;
+        this.index = index;
         this.arrayOfTodoItems = arrayOfTodoItems;
     }
 
@@ -31,7 +32,7 @@ let projectsArray = [];
 let defaultTodoList = [];
 let defaultTodoItem = new TodoItem("Start by adding your own tasks to this default project", true);
 defaultTodoList.push(defaultTodoItem);
-let defaultProject = new Project("Default project", "#000", defaultTodoList);
+let defaultProject = new Project("Default project", "#000",0, defaultTodoList);
 projectsArray.push(defaultProject);
 console.log(projectsArray[0]);
 // console.log(projectsArray);
@@ -111,6 +112,7 @@ function updateAll(){
     updateAddNewTodoItemList();
     updateProjecstList();
     updatePlusIcons();
+    projectCount = document.querySelectorAll('.project').length - 1;
 }
 
 
@@ -118,7 +120,7 @@ function updateAll(){
 
 // function to create Project
 function createNewProject(){
-    projectCount++;
+    // projectCount++;
 
     const newProject = document.createElement('li');
     newProject.classList.add('project');
@@ -147,14 +149,50 @@ function createNewProject(){
     // addEventListenerToIcon(newTodoLabelPlusIcon);
     newTodoList.appendChild(newTodo);
     newProject.appendChild(newTodoList);
-    projectsArray.push(new Project(`New project ${projectCount}`, '#000',[]));
+    projectsArray.push(new Project(`New project ${projectCount}`, '#000', 0, []));
 
     return newProject;
 }
 
 // function to create Project from array (memory)
-function createNewProjectFromArray(){
+function createNewProjectFromArray(project){
+    const newProject = document.createElement('li');
+    newProject.classList.add('project');
+    newProject.style.backgroundColor = project.color;
+    //projectCount will be taken from array
 
+    newProject.setAttribute('id', `project-${project.index}`);
+
+    const newProjectTopRow = document.createElement('div');
+    newProjectTopRow.classList.add('project-top-row');
+
+    const projectTitle = document.createElement('span');
+    projectTitle.textContent = project.title;
+    projectTitle.classList.add('project-title');
+
+    const editIcon = document.createElement('i');
+    editIcon.classList.add('fa-solid', 'fa-pen-to-square');
+
+    newProjectTopRow.appendChild(projectTitle);
+    newProjectTopRow.appendChild(editIcon);
+
+    newProject.appendChild(newProjectTopRow);
+
+    const newTodoList = document.createElement('ul');
+    newTodoList.classList.add('todo-list');
+    let newTodo = createAddNewTodoItem();
+
+    newTodoList.appendChild(newTodo);
+    newProject.appendChild(newTodoList);
+
+    return newProject;
+}
+
+function createNewProjectFactory(project){
+    if(typeof project === Object){
+        return createNewProjectFromArray(project);
+    }
+    else return createNewProject();
 }
 // function to create addNewTodoItem
 function createAddNewTodoItem(){
@@ -187,7 +225,12 @@ function createAddNewTodoItem(){
 
 // function to add Project to DOM
 function addNewProjectToList(){
-    let newProjectToBeAdded = createNewProject();
+    let newProjectToBeAdded = createNewProjectFactory();
+
+
+
+
+
     projecstListElement.insertBefore(newProjectToBeAdded, addNewProject);
 
     updateAll();
@@ -241,10 +284,7 @@ function addTodoItemToArray(todoItem, inputValue){
     let tempTodoItem = new TodoItem(inputValue, true);
     const projectId = project.getAttribute('id');
     const number = projectId.charAt(projectId.length-1);
-    let numberOfTodos = parent.querySelectorAll('.todo-item').length - 1;
-    if(projectsArray[number].title === 'Default project'){
-        numberOfTodos--;
-    }
+    let numberOfTodos = parent.querySelectorAll('.todo-item').length - 2;
     projectsArray[number].addTodoItemClassMethod(tempTodoItem,numberOfTodos);
 }
 
