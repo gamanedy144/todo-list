@@ -148,9 +148,14 @@ function createNewProject(){
     newTodoList.appendChild(newTodo);
     newProject.appendChild(newTodoList);
     projectsArray.push(new Project(`New project ${projectCount}`, '#000',[]));
+
     return newProject;
 }
 
+// function to create Project from array (memory)
+function createNewProjectFromArray(){
+
+}
 // function to create addNewTodoItem
 function createAddNewTodoItem(){
     const newTodo = document.createElement('li');
@@ -224,26 +229,23 @@ function addNewTodoItem(inputValue, currentNode){
     const parent = currentNode.parentElement;
     parent.insertBefore(newTodoItemToBeAdded, currentNode);
 
-
-    console.log(typeof inputValue);
     if(typeof inputValue === 'string'){
-        const project = parent.parentElement;
-        let tempTodoItem = new TodoItem(inputValue, true);
-        const projectId = project.getAttribute('id');
-        const number = projectId.charAt(projectId.length-1);
-        let numberOfTodos = parent.querySelectorAll('.todo-item').length - 1;
-        if(projectsArray[number].title === 'Default project'){
-            numberOfTodos--;
-        }
-        projectsArray[number].addTodoItemClassMethod(tempTodoItem,numberOfTodos);
+        addTodoItemToArray(newTodoItemToBeAdded, inputValue);
     }
 
-    // let numberOfTodos = parent.querySelectorAll('.todo-item').length - 1;
-
-    // projectsArray[projectCount].push()
-    // console.log(numberOfTodos);
-
-
+}
+// function to add the Todo Item into array
+function addTodoItemToArray(todoItem, inputValue){
+    const parent = todoItem.parentElement;
+    const project = parent.parentElement;
+    let tempTodoItem = new TodoItem(inputValue, true);
+    const projectId = project.getAttribute('id');
+    const number = projectId.charAt(projectId.length-1);
+    let numberOfTodos = parent.querySelectorAll('.todo-item').length - 1;
+    if(projectsArray[number].title === 'Default project'){
+        numberOfTodos--;
+    }
+    projectsArray[number].addTodoItemClassMethod(tempTodoItem,numberOfTodos);
 }
 
 // LocalStorage Part
