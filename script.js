@@ -136,8 +136,15 @@ function createNewProject(){
     const editIcon = document.createElement('i');
     editIcon.classList.add('fa-solid', 'fa-pen-to-square');
 
+
+
+    const deleteIcon = document.createElement('i');
+    deleteIcon.classList.add('fa-solid', 'fa-trash');
+
+
     newProjectTopRow.appendChild(projectTitle);
     newProjectTopRow.appendChild(editIcon);
+    newProjectTopRow.appendChild(deleteIcon);
 
     newProject.appendChild(newProjectTopRow);
 
@@ -173,8 +180,14 @@ function createNewProjectFromArray(project){
     const editIcon = document.createElement('i');
     editIcon.classList.add('fa-solid', 'fa-pen-to-square');
 
+    const deleteIcon = document.createElement('i');
+    deleteIcon.classList.add('fa-solid', 'fa-trash');
+
+
     newProjectTopRow.appendChild(projectTitle);
     newProjectTopRow.appendChild(editIcon);
+    newProjectTopRow.appendChild(deleteIcon);
+    
 
     newProject.appendChild(newProjectTopRow);
 
@@ -244,7 +257,30 @@ function addNewProjectToList(){
 function createNewTodoItem(inputValue){
     const newTodo = document.createElement('li');
     newTodo.classList.add('todo-item');
-    newTodo.textContent = inputValue;
+    const newTodoSpan = document.createElement('span');
+    newTodoSpan.textContent = inputValue;
+
+    const separator = document.createElement('hr');
+    separator.classList.add('solid');
+
+    const divManageTodo = document.createElement('div');
+    divManageTodo.classList.add('manage-todo-item');
+
+    const checkIcon = document.createElement('i');
+    checkIcon.classList.add('fa-solid', 'fa-circle-check');
+    divManageTodo.appendChild(checkIcon);
+    const editIcon = document.createElement('i');
+    editIcon.classList.add('fa-solid', 'fa-pen-to-square');
+    divManageTodo.appendChild(editIcon);
+    const deleteIcon = document.createElement('i');
+    deleteIcon.classList.add('fa-solid', 'fa-trash');
+    divManageTodo.appendChild(deleteIcon);
+
+
+    newTodo.appendChild(newTodoSpan);
+    newTodo.appendChild(separator);
+    newTodo.appendChild(divManageTodo);
+
     
     return newTodo;
 }
@@ -252,7 +288,30 @@ function createNewTodoItem(inputValue){
 function createNewTodoItemFromArray(todoItem){
     const newTodo = document.createElement('li');
     newTodo.classList.add('todo-item');
-    newTodo.textContent = todoItem.description;
+    const newTodoSpan = document.createElement('span');
+    newTodoSpan.textContent = todoItem.description;
+    
+    const separator = document.createElement('hr');
+    separator.classList.add('solid');
+
+    const divManageTodo = document.createElement('div');
+    divManageTodo.classList.add('manage-todo-item');
+
+    const checkIcon = document.createElement('i');
+    checkIcon.classList.add('fa-solid', 'fa-circle-check');
+    divManageTodo.appendChild(checkIcon);
+    const editIcon = document.createElement('i');
+    editIcon.classList.add('fa-solid', 'fa-pen-to-square');
+    divManageTodo.appendChild(editIcon);
+    const deleteIcon = document.createElement('i');
+    deleteIcon.classList.add('fa-solid', 'fa-trash');
+    divManageTodo.appendChild(deleteIcon);
+
+
+    newTodo.appendChild(newTodoSpan);
+    newTodo.appendChild(separator);
+    newTodo.appendChild(divManageTodo);
+
     
     return newTodo; 
 }
