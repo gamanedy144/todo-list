@@ -209,6 +209,9 @@ header .account i{
     padding: 0 5px;
     font-size: calc(var(--content-font-size)*1.2);
 }
+.todo-item > .manage-todo-item, hr{
+    display: none;
+}
 .add-new-todo{
     opacity: 50%;
     /* cursor: pointer; */
