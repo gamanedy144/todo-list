@@ -204,6 +204,11 @@ header .account i{
     display: flex;
     justify-content: space-around;
 }
+.todo-item .manage-todo-item i{
+    cursor: pointer;
+    padding: 0 5px;
+    font-size: calc(var(--content-font-size)*1.2);
+}
 .add-new-todo{
     opacity: 50%;
     /* cursor: pointer; */

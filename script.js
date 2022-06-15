@@ -20,6 +20,9 @@ class Project {
     addTodoItemClassMethod(todoItem, location){
         this.arrayOfTodoItems[location] = todoItem;
     }
+    removeByIndex(location){
+        this.arrayOfTodoItems.splice(location,1);
+    }
 }
 //class for todo item
 class TodoItem{
@@ -125,6 +128,7 @@ function createNewProject(){
     const newProject = document.createElement('li');
     newProject.classList.add('project');
     newProject.setAttribute('id', `project-${projectCount}`);
+    newProject.setAttribute('data-project-index', `${projectCount}`);
 
     const newProjectTopRow = document.createElement('div');
     newProjectTopRow.classList.add('project-top-row');
@@ -169,6 +173,7 @@ function createNewProjectFromArray(project){
     //projectCount will be taken from array
 
     newProject.setAttribute('id', `project-${project.index}`);
+    newProject.setAttribute('data-project-index', `${project.index}`);
 
     const newProjectTopRow = document.createElement('div');
     newProjectTopRow.classList.add('project-top-row');
@@ -331,9 +336,24 @@ function addNewTodoItem(inputValue, currentNode){
     const parent = currentNode.parentElement;
     parent.insertBefore(newTodoItemToBeAdded, currentNode);
 
+    const project = parent.parentElement;
+    // const projectId = project.getAttribute('id');
+    const number = project.dataset.projectIndex;
+
+    const todoItemCount = parent.querySelectorAll('.todo-item').length - 2;
+    newTodoItemToBeAdded.setAttribute('data-project-index',`${number}`);
+    newTodoItemToBeAdded.setAttribute('data-todo-item-index',`${todoItemCount}`);
+
     if(typeof inputValue === 'string'){
         addTodoItemToArray(newTodoItemToBeAdded, inputValue);
     }
+    const deleteIcon = newTodoItemToBeAdded.querySelector('.fa-trash');
+    deleteIcon.addEventListener('click', function(event){
+        console.log(event.target.parentElement.parentElement);
+        removeToDoItemFromArray(event.target.parentElement.parentElement);
+        newTodoItemToBeAdded.remove();
+    },false)
+
 
 }
 // function to add the Todo Item into array
@@ -341,10 +361,16 @@ function addTodoItemToArray(todoItem, inputValue){
     const parent = todoItem.parentElement;
     const project = parent.parentElement;
     let tempTodoItem = new TodoItem(inputValue, true);
-    const projectId = project.getAttribute('id');
-    const number = projectId.charAt(projectId.length-1);
-    let numberOfTodos = parent.querySelectorAll('.todo-item').length - 2;
+
+    const number = project.dataset.projectIndex;
+
+    let numberOfTodos = project.querySelectorAll('.todo-item').length - 2;
     projectsArray[number].addTodoItemClassMethod(tempTodoItem,numberOfTodos);
+}
+
+function removeToDoItemFromArray(todoItem){
+
+    projectsArray[todoItem.dataset.projectIndex].removeByIndex(todoItem.dataset.todoItemIndex);
 }
 
 // LocalStorage Part
