@@ -10,14 +10,14 @@ let projectCount = document.querySelectorAll('.project').length - 1;
 
 //class for project - title, color and the list of todo lists
 class Project {
-    constructor(title, color,index, arrayOfTodoItems){
+    constructor(title, color, index, arrayOfTodoItems){
         this.title = title;
         this.color = color;
         this.index = index;
         this.arrayOfTodoItems = arrayOfTodoItems;
     }
-    static crcreateProjectFromObject(object){
-        return new Project(object.title, object.color, object.index, object.arrayOfTodoItems);
+    static createProjectFromObject(object, array){
+        return new Project(object.title, object.color, object.index, array);
     }
     addTodoItemClassMethod(todoItem, location){
         this.arrayOfTodoItems[location] = todoItem;
@@ -38,20 +38,33 @@ class TodoItem{
 }
 
 let projectsArray = [];
-let defaultTodoList = [];
-let defaultTodoItem = new TodoItem("Start by adding your own tasks to this default project", true);
-defaultTodoList.push(defaultTodoItem);
-let defaultProject = new Project("Default project", "#000",0, defaultTodoList);
-projectsArray.push(defaultProject);
+// let defaultTodoList = [];
+// let defaultTodoItem = new TodoItem("Start by adding your own tasks to this default project", true);
+// defaultTodoList.push(defaultTodoItem);
+// let defaultProject = new Project("Default project", "#000",0, defaultTodoList);
+// projectsArray.push(defaultProject);
 
 // console.log(projectsArray);
 // console.log(defaultTodoList);
+( () => {
+    projectsArray = localStorageOnLoad();  
+    // console.log(projectsArray);
+    projectsArray.forEach(function(project){
+        console.log('Type of project inside IIFE '+typeof project);
+        addNewProjectToList(project); 
+        // //current node is UL
+        // console.log(project);
+        // console.log(project.arrayOfTodoItems);
+
+    })
+})();
+
 
 window.addEventListener('load', function(){
     console.log('I am loaded');
     addEventListenerToNewTodoItemList();
     addEventListenerToPlusIcons();
-    localStorageOnLoad();
+
 } );
 
 
@@ -65,7 +78,9 @@ function updateProjecstList(){
 function updatePlusIcons(){
     plusIcons = document.querySelectorAll('.fa-square-plus');
 }
-addNewProject.addEventListener('click', addNewProjectToList);
+addNewProject.addEventListener('click', function() {
+    addNewProjectToList();
+});
 
 // Add event listener to newTodo item
 function addEventListenerToNewTodoItem(currentNode){
@@ -209,15 +224,25 @@ function createNewProjectFromArray(project){
 
     newTodoList.appendChild(newTodo);
     newProject.appendChild(newTodoList);
+    console.log('Project is ');
+    console.log(project);
+    if(project.arrayOfTodoItems.length != 0){
+        console.log('start creating todo items');
+        project.arrayOfTodoItems.forEach(function(item){
+            addNewTodoItem(item.description, newProject.querySelector('.add-new-todo'));
+        })
+    }
 
     return newProject;
 }
 
 function createNewProjectFactory(project){
-    if(typeof project === Object){
+    if(typeof project === 'object'){
         return createNewProjectFromArray(project);
     }
-    else return createNewProject();
+    else {
+        return createNewProject();
+    }
 }
 // function to create addNewTodoItem
 function createAddNewTodoItem(){
@@ -249,8 +274,8 @@ function createAddNewTodoItem(){
 }
 
 // function to add Project to DOM
-function addNewProjectToList(){
-    let newProjectToBeAdded = createNewProjectFactory();
+function addNewProjectToList(project){
+    let newProjectToBeAdded = createNewProjectFactory(project);
 
 
 
@@ -330,10 +355,13 @@ function createNewTodoItemFromArray(todoItem){
 
 function createNewTodoItemFactory(todoItem){
 
-    if((typeof todoItem) === Object){
+    if((typeof todoItem) === 'object'){
+        console.log('using createNewToDoItemFromArray');
+        console.log(todoItem)
         return createNewTodoItemFromArray(todoItem);
     }
     else {
+        console.log('using createNewToDoItem');
         return createNewTodoItem(todoItem);
     }
 }
@@ -402,70 +430,53 @@ function removeToDoItemFromArray(todoItem){
 
 // LocalStorage Part
 // localStorage.setItem(array, projectsArray);
-function checkIfLocalStorageEmpty(){
-    if(localStorage.getItem('array') == null){
-        // let tempArray = [];
-        // let tempTodoList = [];
-        // let tempTodoItem = new TodoItem("Start by adding your own tasks to this default project", true);
-        // tempTodoList.push(tempTodoItem);
-        // tempProject = new Project("Default project", "#000",0, tempTodoList);
-        // tempArray.push(tempProject);
-        // console.log(tempArray);
-        localStorage.setItem('array', JSON.stringify(projectsArray));
-        
-        return 0;
-    }
-    else{
-        console.log('hellloooooo');
-        projectsArray = loadFromMemory();
-        return 1;
-    }
-
-}
-
-function loadFromMemory(){
-    let tempArray = localStorage.getItem('array');
-        tempProjectsArray = JSON.parse(tempArray);
-        let projectsArray = [];
-        tempProjectsArray.forEach(function(project){
-            let tempArrayOfTodos = [];
-            project.arrayOfTodoItems.forEach(function(todoItem){
-                let tempTodoItem = TodoItem.createTodoItemFromObject(todoItem);
-                tempArrayOfTodos.push(tempTodoItem);
-            })
-            project.arrayOfTodoItems = tempArrayOfTodos;
-            let tempProject = Project.createProjectFromObject(project);
-            project - tempProject;
-        })
-        projectsArray = tempProjectsArray.map(obj => ({...obj}));
-        return projectsArray;
-}
-function domInitialization(array){
-    if(typeof array == Array){
-        console.log('im an array');
-    }
-}
-
 
 function localStorageOnLoad(){
     //check if item in memory
-    let array = JSON.stringify(projectsArray);
-    JSON.parse(array).forEach(function(project){
-        // console.log(project.arrayOfTodoItems);
-        let arrayOfItems = project.arrayOfTodoItems;
-        arrayOfItems.forEach(function(item){
-            console.log(item);
-            let tempTodoItem = TodoItem.createTodoItemFromObject(item);
-            console.log(tempTodoItem);
-        })
-        console.log(project);
-    })
-    console.log(array)
-    if(localStorage.getItem('array') == null){
+    let array = [];
+    // console.log(array)
+    if(localStorage.getItem('array') === null){
+
+        let tempTodoList = [];
+        let tempTodoItem = new TodoItem("Start by adding your own tasks to this default project", true);
+        tempTodoList.push(tempTodoItem);
+        let tempProject = new Project("Default project", "green", 0, tempTodoList);
+        array.push(tempProject);
+        let arrayJson = JSON.stringify(array);
+
         console.log('local storage is empty');
-        localStorage.setItem('array', array);
+        console.log(arrayJson);
+        localStorage.setItem('array', arrayJson);
+
     }
     else{
+        console.log("local storage is not empty, before methods");
+        let arrayJson = localStorage.getItem('array');
+        // console.log(arrayJson);
+        array = JSON.parse(arrayJson);
+        // console.log(array);
+
         console.log('local storage is not empty');
     }
+    // console.log(convertToObjects(array));
+    return convertToObjects(array);
+}
+
+function convertToObjects(array){
+    let tempArray = [];
+    console.log('\n------- start of convert to objects -------\n');
+    array.forEach( function(project) {
+        let tempItems = [];
+        let arrayOfItems = project.arrayOfTodoItems;
+        arrayOfItems.forEach(function(item) {
+            let tempTodoItem = TodoItem.createTodoItemFromObject(item);
+            tempItems.push(tempTodoItem);
+        })
+        let tempProject = Project.createProjectFromObject(project, tempItems);
+
+        tempArray.push(tempProject);
+    })
+
+    console.log('------- end of convert to objects --------\n');
+    return tempArray;
 }
